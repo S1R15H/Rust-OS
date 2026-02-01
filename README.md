@@ -2,9 +2,9 @@
 
 A custom operating system kernel written in Rust for the x86_64 architecture. This project is designed to explore low-level programming concepts and OS development.
 
-!DEMO:
+## !DEMO:
 
-<img width="1434" height="853" alt="RustOS" src="https://github.com/user-attachments/assets/9098a987-9dea-41fc-bc9a-51242c69cb79" />
+https://github.com/user-attachments/assets/60c3181e-18a0-4d74-9ea9-82f354abb60a
 
 ## Features
 
@@ -128,4 +128,8 @@ Ensure `rust-src` is installed:
 ```bash
 rustup component add rust-src
 ```
+
+## Older version
+
+<img width="1434" height="853" alt="RustOS" src="https://github.com/user-attachments/assets/9098a987-9dea-41fc-bc9a-51242c69cb79" />
 
