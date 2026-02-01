@@ -1,7 +1,6 @@
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use crate::println;
 use crate::gdt;
-use crate::print;
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin;
@@ -79,8 +78,6 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(
 extern "x86-interrupt" fn timer_interrupt_handler(
     _stack_frame: InterruptStackFrame)
 {
-    print!(".");
-
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer.as_u8());

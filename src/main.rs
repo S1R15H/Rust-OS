@@ -7,10 +7,8 @@
 use core::panic::PanicInfo;
 use x86_64::VirtAddr;
 use os::println;
-use os::task::keyboard;
 use bootloader::{BootInfo, entry_point};
-use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
-use os::task::{Task, simple_executor::SimpleExecutor};
+use os::task::Task;
 use os::task::executor::Executor;
 
 extern crate alloc;
@@ -39,12 +37,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     test_main();
 
     let mut executor = Executor::new();
-    executor.spawn(Task::new(example_task()));
-    executor.spawn(Task::new(keyboard::print_keypresses())); 
+    let editor = os::editor::Editor::new();
+    executor.spawn(Task::new(editor.run()));
     executor.run();
-
-    println!("It did not crash!");
-    os::hlt_loop();
 }
 
 /// This function is called on panic.
@@ -61,12 +56,5 @@ fn panic(info: &PanicInfo) -> ! {
     os::test_panic_handler(info)
 }
 
-async fn async_number() -> u32 {
-    42
-}
 
-async fn example_task() {
-    let number = async_number().await;
-    println!("async number: {}", number);
-}
 

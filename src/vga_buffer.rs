@@ -22,10 +22,10 @@ pub enum Color {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
-struct ColorCode(u8);
+pub struct ColorCode(u8);
 
 impl ColorCode {
-    fn new(foreground: Color, background: Color) -> ColorCode {
+    pub fn new(foreground: Color, background: Color) -> ColorCode {
         ColorCode((background as u8) << 4 | (foreground as u8))
     }
 }
@@ -106,6 +106,50 @@ impl Writer {
             }
 
         }
+    }
+
+    pub fn set_cursor_position(&mut self, row: usize, col: usize) {
+        if row >= BUFFER_HEIGHT || col >= BUFFER_WIDTH {
+             return;
+        }
+        self.column_position = col;
+        
+        // Update hardware cursor
+        use x86_64::instructions::port::Port;
+        
+        let position = row * BUFFER_WIDTH + col;
+        let mut port_3d4 = Port::new(0x3D4);
+        let mut port_3d5 = Port::new(0x3D5);
+        unsafe {
+            port_3d4.write(0x0F as u8);
+            port_3d5.write((position & 0xFF) as u8);
+            port_3d4.write(0x0E as u8);
+            port_3d5.write(((position >> 8) & 0xFF) as u8);
+        }
+    }
+
+    pub fn clear_screen(&mut self) {
+        for row in 0..BUFFER_HEIGHT {
+            self.clear_row(row);
+        }
+        self.set_cursor_position(0, 0);
+    }
+    
+    pub fn write_char_at(&mut self, row: usize, col: usize, byte: u8, color: ColorCode) {
+        if row >= BUFFER_HEIGHT || col >= BUFFER_WIDTH {
+            return;
+        }
+        self.buffer.chars[row][col].write(ScreenChar {
+            ascii_character: byte,
+            color_code: color,
+        });
+    }
+
+    pub fn read_char_at(&self, row: usize, col: usize) -> Option<u8> {
+         if row >= BUFFER_HEIGHT || col >= BUFFER_WIDTH {
+            return None;
+        }
+        Some(self.buffer.chars[row][col].read().ascii_character)
     }
 }
 
