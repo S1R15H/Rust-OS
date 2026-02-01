@@ -15,6 +15,16 @@ https://github.com/user-attachments/assets/60c3181e-18a0-4d74-9ea9-82f354abb60a
 - **Async/await support** for cooperative multitasking
 - **Serial port communication** for debugging
 - **Integration tests** with QEMU
+- **Built-in Text Editor** with flicker-free rendering and custom dashboard UI
+
+## Built-in Text Editor
+
+The OS now boots directly into a memory-resident text editor featuring:
+
+*   **Dashboard UI**: Custom ASCII art header with system status information.
+*   **Interactive Editing**: Supports typing, backspace, newlines, and arrow key navigation.
+*   **Flicker-Free Rendering**: Optimized VGA driver uses an overwrite strategy to prevent screen flashing.
+*   **System Control**: Press `ESC` to instantly shutdown the QEMU machine.
 
 ## Project Structure
 
@@ -27,6 +37,8 @@ https://github.com/user-attachments/assets/60c3181e-18a0-4d74-9ea9-82f354abb60a
 - **`src/gdt.rs`** - Global descriptor table setup
 - **`src/memory.rs`** - Memory management and paging
 - **`src/allocator.rs`** - Heap allocator implementation
+- **`src/allocator.rs`** - Heap allocator implementation
+- **`src/editor/mod.rs`** - Text editor logic and UI rendering
 - **`src/serial.rs`** - Serial port driver for debugging output
 
 ### Subdirectories
